@@ -1,4 +1,5 @@
-S junk files
+
+# OS junk files
 [Tt]humbs.db
 *.DS_Store
 
@@ -102,3 +103,4 @@ tasks.xml
 
 /out/hidden.tv
 /out/hidden.tv.bak
+*.orig
