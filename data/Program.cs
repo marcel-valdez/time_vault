@@ -85,7 +85,7 @@ namespace TimeVault
       DateTime deadline;
       if (!DateTime.TryParseExact(args[1], INPUT_FORMAT, null, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeLocal, out deadline))
       {
-        Console.WriteLine("Time format is wrong. Ranges: 1/1/0001 00:00 - 31/12/9999 23:59");
+        Console.WriteLine("Time format is wrong. Ranges: \"1/1/0001 00:00\" - \"31/12/9999 23:59\"");
         return ERROR;
       }
 
@@ -119,12 +119,6 @@ namespace TimeVault
     private static string GetKey()
     {
       return KeyGetter.GetKey().Substring(0, 16);
-    }
-
-    private static string GetInitial()
-    {
-      // REPLACE WITH INITIAL
-      return "XXXXXXXXXXXXXXXXX";
     }
 
     private static void ConfirmEncryption(string plain)
@@ -164,7 +158,7 @@ namespace TimeVault
 
     private static void PrintUsage()
     {
-      Console.WriteLine("usage: timevault.exe [-r | [<string> <dd/mm/yyyy HH:mm> [-n] | -i ### [d|h|m] >]" + Environment.NewLine +
+      Console.WriteLine("usage: timevault.exe [-r | [\"<string>\" \"<dd/mm/yyyy HH:mm>\" [-n] | -i ### [d|h|m] >]" + Environment.NewLine +
                                 "-r: Use the current state and continue waiting." + Environment.NewLine +
                                 "-n: Do not confirm that password was encrypted correctly." + Environment.NewLine +
                                 "-i: Increment the wait time by ### d: days, h: hours, m: minutes");

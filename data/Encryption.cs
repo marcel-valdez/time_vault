@@ -16,18 +16,20 @@ namespace TimeVault
 
     public static byte[] Encrypt(byte[] data, string keyStr)
     {
-      Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(keyStr, SALT, 4);
+      byte[] key;
+      byte[] iv;
+      byte[] encryptedUnicodeBytes;
 
-      byte[] key = pdb.GetBytes(32);
-      byte[] iv = pdb.GetBytes(16);
-
-      byte[] encryptedUnicodeBytes = null;
+      using (Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(keyStr, SALT, 4))
       using (AesManaged aes = new AesManaged())
       {
+        key = pdb.GetBytes(32);
+        iv = pdb.GetBytes(16);
         aes.Padding = PaddingMode.Zeros;
         ICryptoTransform encryptor = aes.CreateEncryptor(key, iv);
         encryptedUnicodeBytes = Transform(data, encryptor);
         aes.Clear();
+        pdb.Reset();
       }
 
       return encryptedUnicodeBytes;
@@ -40,14 +42,15 @@ namespace TimeVault
     }
 
     public static byte[] Decrypt(byte[] encrypted, string keyStr) {
-      Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(keyStr, SALT, 4);
+      byte[] key;
+      byte[] iv;
+      byte[] plainUnicodeBytes;
 
-      byte[] key = pdb.GetBytes(32);
-      byte[] iv = pdb.GetBytes(16);
-
-      byte[] plainUnicodeBytes = null;
+      using (Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(keyStr, SALT, 4))
       using (AesManaged aes = new AesManaged())
       {
+        key = pdb.GetBytes(32);
+        iv = pdb.GetBytes(16);
         aes.Padding = PaddingMode.Zeros;
         byte[] paddedUnicodeBytes = Transform(encrypted, aes.CreateDecryptor(key, iv));
         int removed = 0;
@@ -62,6 +65,7 @@ namespace TimeVault
         plainUnicodeBytes = new byte[paddedUnicodeBytes.Length - removed];
         Array.Copy(paddedUnicodeBytes, plainUnicodeBytes, plainUnicodeBytes.Length);
         aes.Clear();
+        pdb.Reset();
       }
 
       return plainUnicodeBytes;

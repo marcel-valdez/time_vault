@@ -25,9 +25,9 @@ task :build_program do
 end
 
 desc 'Test task'
-Rake::TestTask.new do |t|
+Rake::TestTask.new do |setup|
   files = FileList['test/*_test.rb']
-  t.loader = :rake
-  t.test_files = files
-  t.warning = true
+  setup.loader = :rake
+  setup.test_files = files
+  setup.warning = true
 end
